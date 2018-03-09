@@ -26,28 +26,28 @@
 ## 第二部分 自动内存管理机制
 ### 第二章 java内存区域与内存溢出异常
 #### java虚拟机运行时内存布局  
-   ![](assets/jvm-mem.png)
+   ![](assets/jvm-memory.jpg)
 
-* 程序计数器与java虚拟机栈都是线程私有的，对于native方法，pc值为空（Undefined）
-* 虚拟机栈和本地方法栈都会抛出StackOverflowError和OutOfMemoryError
-* Java堆是线程共享的。分为新生代与老年代，例如Eden空间，From Survivor， To Survivor；概念*TLAB*（Thread Local Allocation Buffer，线程私有的分配缓冲区）
-    > The heap is the runtime data area from which memory for all class instances and arrays is allocated
+   * 程序计数器与java虚拟机栈都是线程私有的，对于native方法，pc值为空（Undefined）
+   * 虚拟机栈和本地方法栈都会抛出StackOverflowError和OutOfMemoryError
+   * Java堆是线程共享的。分为新生代与老年代，例如Eden空间，From Survivor， To Survivor；概念*TLAB*（Thread Local Allocation Buffer，线程私有的分配缓冲区）
+       > The heap is the runtime data area from which memory for all class instances and arrays is allocated
 
-* 方法区（Method Area，或者Non-heap）线程共享，对于HotSpot，也称为*永久代*（Permanent Generation）而永久代将来可能被Native Memory替代，JDK1.7之后，字符串常量池已从永久代移出；方法区无法分配内存时，抛出OutOfMemoryError
-    > 在 JDK 1.8 中用元空间替换了永久代作为方法区的实现，元空间是本地内存
+   * 方法区（Method Area，或者Non-heap）线程共享，对于HotSpot，也称为*永久代*（Permanent Generation）而永久代将来可能被Native Memory替代，JDK1.7之后，字符串常量池已从永久代移出；方法区无法分配内存时，抛出OutOfMemoryError
+       > 在 JDK 1.8 中用元空间替换了永久代作为方法区的实现，元空间是本地内存
 
-* 运行时常量池（Runtime Constant Pool），属于方法区
-    > String.intern()：Native方法，如果字符串常量池中已经包含一个等于String对象的字符串，则返回代表池中这个字符串的String对象；否则，将此String对象包含的字符串添加到常量池中，并返回此String对象的引用。
-* 直接内存（Direct Memory）
+   * 运行时常量池（Runtime Constant Pool），属于方法区
+       > String.intern()：Native方法，如果字符串常量池中已经包含一个等于String对象的字符串，则返回代表池中这个字符串的String对象；否则，将此String对象包含的字符串添加到常量池中，并返回此String对象的引用。
+   * 直接内存（Direct Memory）
 #### 对象的内存布局（HotSpot）
    * 对象头（header）、示例数据（Instance Data）、对齐填充（Padding）
    * 对象头分为两部分：Mark Word（存储对象自身运行时数据）、类型指针  
-   ![](assets/hotspot-mark-word.png)
+   ![](assets/hotspot-mark-word.jpg)
 #### 对象的访问定位
    * 句柄  
-   ![](assets/use-handle.png)  
+   ![](assets/use-handle.jpg)  
    * 直接指针（HotSpot）  
-   ![](assets/use-pointer.png)
+   ![](assets/use-pointer.jpg)
 
 ### 第三章 垃圾收集器与内存分配策略
 #### 如何判定对象已“死”
@@ -55,7 +55,7 @@
    * 可达性分析算法（Reachability Analysis），GC Root和引用链（Reference Chain）  
        * `GC Root：栈帧中局部变量表中引用的对象、方法区中类静态属性引用的对象、方法区中常量引用的对象、本地方法栈中JNI引用的对象`
    * jdk1.2以后的四种引用类型
-      * 强引用（Strong Reference）：`Object obj = new Object()`
+      * 强引用（Strong Reference）：`Object obj = new Object();`
       * 软引用（Soft Reference）：弱引用对象在将要发生内存溢出异常时会被加入到回收范围进行第二次回收
       * 弱引用（Weak Reference）：被弱引用关联的对象只能生存到下一个GC发生之前
       * 虚引用（Phantom Reference）：为一个对象设置虚引用能在该对象被GC时受到系统通知
@@ -76,24 +76,24 @@
    * 安全区域（Safe Region）
 #### HotSpot垃圾收集器
    * Serial：单线程
-   ![](assets/serial&serial-old.png)
+   ![](assets/serial&serial-old.jpg)
    * ParNew：Serial的多线程版本
-   ![](assets/parnew&serial-old.png)
+   ![](assets/parnew&serial-old.jpg)
    * Parallel Scavenge：可控制的吞吐量（Throughput）或“吞吐量优先”，多线程+复制算法
    * Serial Old：Serial老年代版本，可配合Parallel Scavenge或CMS
    * Parallel Old：Parallel Scavenge老年代版本，多线程+标记整理算法
-   ![](assets/parallel-scavenge&old.png)
+   ![](assets/parallel-scavenge&old.jpg)
    * CMS（Concurrent Mark Sweep）
       * CPU资源敏感
       * 浮动垃圾（Floating Garbage）导致Concurrent Mode Failure并导致Full GC
       * 内存碎片
-   ![](assets/cms.png)
+   ![](assets/cms.jpg)
    * G1（Garbage First）
       * 并行与并发
       * 分代收集
       * 空间整合：整体基于标记整理算法，Region之间使用复制算法
       * 可预测的停顿
-   ![](assets/g1.png)
+   ![](assets/g1.jpg)
 
 #### 对象分配与回收策略
    * 对象优先在Eden分配
@@ -126,7 +126,7 @@
 ## 第三部分 虚拟机执行子系统
 ### 第六章 类文件结构
 * class文件结构（**Big-endian**）  
-   ![](assets/class-structure.png)
+   ![](assets/class-structure.jpg)
 * 魔数（Magic Number）0xCAFEBABE
 * 常量池
    * *字面量*（Literal）
@@ -135,8 +135,8 @@
       * 字段名称和描述符
       * 方法名称和描述符
    * 常量项结构  
-    ![](assets/constant-pool1.png)
-    ![](assets/constant-pool2.png)
+    ![](assets/constant-pool1.jpg)
+    ![](assets/constant-pool2.jpg)
 * 访问标志（Access flags）
 * 类索引，父类索引，接口索引集合
 * 字段表（field-info）集合：类变量和实例变量
@@ -165,7 +165,7 @@
 
 ### 第七章 虚拟机类加载机制
 #### 类加载的时机
-   * ![](assets/class-lifecycle.png)
+   * ![](assets/class-lifecycle.jpg)
    * 解析阶段在某些情况下可在初始化阶段之后开始
    * 类的初始化
       * 主动引用（有且仅有**5**种）
@@ -200,8 +200,8 @@
       * 接口的实现类初始化时不会执行接口的`<clinit>`方法
       * 同一个类加载器下，一个类型智慧初始化一次
    * 类加载器
-      * 每一个类加载器都拥有一个独立的类名称空间，所以**比较两个Class对象是否相等只有在同一个类加载器加载的情况下才有意义**  、
-
+      * 每一个类加载器都拥有一个独立的类名称空间，所以**比较两个Class对象是否相等只有在同一个类加载器加载的情况下才有意义**  
+		<!--lang:java-->
 			public class Test {
     			static {
         			i = 0;                // 给变量赋值可以正常编译通过
@@ -209,6 +209,7 @@
     			}
     			static int i = 1;
 			}
+
       * 系统提供的类加载器
          * 启动类加载器（Bootstrap ClassLoader）：使用C++实现，加载$JAVA_HOME/lib
          * 扩展类加载器（Extension ClassLoader）：sun.misc.Launcher$ExtClassLoader，$JAVA_HOME/lib/ext或java.ext.dirs
@@ -220,7 +221,7 @@
 
 ### 第八章 虚拟机字节码执行引擎
 #### 运行时栈帧结构
-   * ![](assets/stack-frame.png)
+   * ![](assets/stack-frame.jpg)
    * 局部变量表
       * Slot复用对GC的影响`不使用的对象应手动赋值为null`
    * 操作数栈（Operand Stack）
@@ -269,13 +270,14 @@
    * java中实现可见性的三个关键字
       * volatile
       * synchronized
-      * final：被fina修饰的字段在构造器中一旦初始化完成，并且构造器没有把this的引用传递出去（this引用逃逸），那么其他线程就能看到final字段的值
+      * final：被fina修饰的字段在构造器中一旦初始化完成，并且构造器没有把this的引用传递出去（[this引用逃逸](http://blog.csdn.net/u010001838/article/details/45691913)），那么其他线程就能看到final字段的值
    * 先行发生原则（happens-before）
       > 先行发生时java内存模型中定义的两项动作之间的偏序关系，如果操作A线程发生于与操作B，就是说再去爱发生操作B之前，操作A产生的影响能被操作B观察到，“影响包括修改了内存中共享变量的值、发送了消息、调用了方法等。
 
        	i = 1; // 在线程A中执行
        	j = i; // 在线程B中执行
        	i = 2; // 在线程C中执行
+
    * java内存模型的天然的先行发生关系
       * 程序次序规则（Program Order Rule）：**控制流顺序而非程序代码顺序**
       * 管程锁定规则（Monitor Lock Rule）：一个unlock操作先行发生于后面对同一个锁的lock操作，时间上的先后顺序
@@ -288,11 +290,11 @@
    * java与线程
       * 线程的实现
          * 内核线程（Kernel-Level Thread，KLT）与轻量级进程（Light Weight Process，LWP）  
-            ![](assets/KLT.png)
+            ![](assets/KLT.jpg)
          * 用户线程（User Thread，UT)  
-            ![](assets/UT.png)
+            ![](assets/UT.jpg)
          * 用户线程加轻量级进程混合实现
-            ![](assets/UT-LWP.png)
+            ![](assets/UT-LWP.jpg)
       * java线程的实现
          * 对于Windows和Linux，使用一对一的线程模型，一条java线程映射到一条LWP上
          * 对于Solaris，支持一对一和多对多
@@ -302,3 +304,53 @@
       * *Windows下的优先级推进器（Priority Boosting）
 
 ## 第十三章 线程安全与锁优化
+### 线程安全
+   * 定义  
+    > 当多个线程访问同一个对象时，如果不用考虑这些线程在运行时环境下的调度和交替执行，也不需要进行额外的同步，或者在调用方进行任何其它的协调操作，调用这个对象的行为都可以获得正确的结果，那么这个对象就是线程安全的
+
+   * java中操作共享的数据种类
+      * 不可变（Immutable）对象一定是线程安全的，例如*final，String，枚举型，java.lang.Number部分子类（AutomicInteger和AtomicLong例外）*
+      * 绝对线程安全
+      * 相对线程安全，即通常意义的线程安全，如*Vector，HashTable，Collections的synchronizedCollection方法包装的集合*
+      * 线程兼容，手动使用同步，例如*ArrayList，HashMap*
+      * 线程对立
+   * 线程安全的实现方法
+      * 互斥同步（Mutual Exclusion & Synchronization），
+         * *monitorenter会获取对象的锁，如果对象没被锁定或当前线程已经拥有了对象的锁，就将锁的计数器加1，monitorexit则会将锁计数器减1，当计数器为0时释放锁*
+         * ReentrantLock：等待可中断锁、公平锁、锁绑定多个条件（一个ReentrantLock可绑定多个Condition对象）
+         * synchronized块和ReentrantLock的性能比较
+      * 非阻塞同步：基于冲突检测的乐观并发策略，基于硬件的原子指令
+         * Test-and-Set
+         * Fetch-and-Increase
+         * Swap
+         * Compare-and-Swap（CAS）：“ABA”漏洞
+         * Load-Linked/Store-Conditional（LL/SC）
+      * 无同步方案
+         * 可重入代码（Reentrant Code），或纯代码（Pure code）是线程安全的：一个方法的返回结果是可预测的，相同的输入产生相同的结果，例如*函数式编程或Lambda函数*即是线程安全的
+         * 线程本地存储（Thread Local Storage）：例如*Web交互模型的“一个请求对应一个服务器”线程（Thread-per-Request）方式*
+   * 锁优化
+      * 自旋锁与自适应自旋：-XX:+UserSpinning、-XX:PreBlockSpin，自适应则指自旋时间有前一次在同一个锁上的自旋时间及锁的拥有者的状态来决定
+      * 锁消除  
+		<!--lang:java-->
+			// 原始代码
+			public String concatString(String s1, String s2, String s3) {
+			    return s1 + s2 + s3;
+			}
+			// JDK1.5之前的javac转化后的操作，StringBuffer的append是同步的，锁就是sb对象，但是sb的引用只限制在了本方法内部，不需要锁
+			pubic String concatString(String s1, String s2, String s3) {
+			    StringBuffer sb = new StringBuffer();
+			    sb.append(s1);
+			    sb.append(s2);
+			    sb.append(s3);
+			    return sb.toString();
+			}
+
+      * 锁粗化
+      * 轻量级锁  
+         ![](assets/hotspot-mark-word.jpg)
+         ![](assets/light-weight-lock.jpg)
+      * 偏向锁（Biased Lock）：-XX:+UseBiasedLocking 
+         ![](assets/biased-lock.jpg)
+
+
+		
